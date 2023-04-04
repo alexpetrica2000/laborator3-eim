@@ -13,12 +13,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class PhoneDialerActivity extends AppCompatActivity {
 
     private Button dialbutton;
 
     private ImageButton callButton;
+
+    private ImageButton contactsButton;
 
     private ImageButton hangButton;
 
@@ -42,6 +45,15 @@ public class PhoneDialerActivity extends AppCompatActivity {
                 case R.id.hang_button:
                     finish();
                     break;
+                case R.id.contacts_button:
+                    String phoneNumber = textField.getText().toString();
+                    if (phoneNumber.length() > 0) {
+                        Intent intent = new Intent("ro.pub.cs.systems.eim.lab04.contactsmanager.intent.action.ContactsManagerActivity");
+                        intent.putExtra("ro.pub.cs.systems.eim.lab04.contactsmanager.PHONE_NUMBER_KEY", phoneNumber);
+                        startActivityForResult(intent, 2022);
+                    } else {
+                        Toast.makeText(getApplication(), getResources().getString(R.string.phone_error), Toast.LENGTH_LONG).show();
+                    }
                 case R.id.call_button:
                     if (ContextCompat.checkSelfPermission(PhoneDialerActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(
@@ -89,6 +101,10 @@ public class PhoneDialerActivity extends AppCompatActivity {
 
         callButton = (ImageButton) findViewById(R.id.call_button);
         callButton.setOnClickListener(listener);
+
+
+        contactsButton = (ImageButton) findViewById(R.id.contacts_button);
+        contactsButton.setOnClickListener(listener);
         hangButton = (ImageButton) findViewById(R.id.hang_button);
         hangButton.setOnClickListener(listener);
         backspaceButton = (ImageButton) findViewById(R.id.backspace_button);
